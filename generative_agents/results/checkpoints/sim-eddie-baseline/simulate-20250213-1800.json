@@ -1,0 +1,1258 @@
+{
+  "stride": 60,
+  "time": "20250213-18:00",
+  "maze": {
+    "path": "assets\\village\\maze.json"
+  },
+  "agent_base": {
+    "percept": {
+      "mode": "box",
+      "vision_r": 8,
+      "att_bandwidth": 8
+    },
+    "schedule": {
+      "max_try": 5,
+      "diversity": 5
+    },
+    "think": {
+      "llm": {
+        "provider": "ollama",
+        "model": "qwen3:8b-q4_K_M",
+        "base_url": "http://127.0.0.1:11434/v1",
+        "api_key": ""
+      },
+      "interval": 1000,
+      "poignancy_max": 150
+    },
+    "chat_iter": 4,
+    "associate": {
+      "embedding": {
+        "provider": "ollama",
+        "model": "bge-m3:latest",
+        "base_url": "http://127.0.0.1:11434",
+        "api_key": ""
+      },
+      "retention": 8
+    }
+  },
+  "agents": {
+    "简": {
+      "config_path": "assets\\village\\agents\\简\\agent.json",
+      "status": {
+        "poignancy": 20
+      },
+      "schedule": {
+        "create": "20250213-09:00:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "起床",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "吃早餐",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "休息",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "休息",
+            "start": 540,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "整理客厅",
+                "start": 540,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "准备晚餐食材",
+                "start": 555,
+                "duration": 15
+              },
+              {
+                "idx": 2,
+                "describe": "听轻音乐放松",
+                "start": 570,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "整理衣物",
+                "start": 580,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "看书",
+                "start": 590,
+                "duration": 5
+              },
+              {
+                "idx": 5,
+                "describe": "照顾宠物",
+                "start": 595,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 10,
+            "describe": "休息",
+            "start": 600,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "整理客厅",
+                "start": 600,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "准备晚餐食材",
+                "start": 610,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "阅读书籍",
+                "start": 620,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "轻柔瑜伽",
+                "start": 630,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "整理衣柜",
+                "start": 640,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "准备早餐材料",
+                "start": 650,
+                "duration": 5
+              },
+              {
+                "idx": 6,
+                "describe": "听音乐放松",
+                "start": 655,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 11,
+            "describe": "休息",
+            "start": 660,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "放松休息",
+                "start": 660,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "整理客厅",
+                "start": 675,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "阅读书籍",
+                "start": 685,
+                "duration": 20
+              },
+              {
+                "idx": 3,
+                "describe": "听轻音乐",
+                "start": 705,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "做简单的瑜伽",
+                "start": 715,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 12,
+            "describe": "吃午饭",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "检查冰箱食材",
+                "start": 720,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "准备午餐食材",
+                "start": 725,
+                "duration": 15
+              },
+              {
+                "idx": 2,
+                "describe": "烹饪主菜",
+                "start": 740,
+                "duration": 20
+              },
+              {
+                "idx": 3,
+                "describe": "准备配菜",
+                "start": 760,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "与家人共进午餐",
+                "start": 770,
+                "duration": 15
+              },
+              {
+                "idx": 5,
+                "describe": "清洗餐具",
+                "start": 785,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "休息",
+            "start": 780,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "整理客厅",
+                "start": 780,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "准备晚餐食材",
+                "start": 795,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "阅读书籍",
+                "start": 805,
+                "duration": 15
+              },
+              {
+                "idx": 3,
+                "describe": "整理厨房",
+                "start": 820,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "听音乐放松",
+                "start": 830,
+                "duration": 10
+              }
+            ]
+          },
+          {
+            "idx": 14,
+            "describe": "休息",
+            "start": 840,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "整理客厅",
+                "start": 840,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "整理卧室",
+                "start": 855,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "准备晚餐食材",
+                "start": 865,
+                "duration": 20
+              },
+              {
+                "idx": 3,
+                "describe": "清洗餐具",
+                "start": 885,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "整理衣物",
+                "start": 895,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 15,
+            "describe": "整理家务",
+            "start": 900,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "整理客厅",
+                "start": 900,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "洗碗",
+                "start": 915,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "整理卧室",
+                "start": 925,
+                "duration": 15
+              },
+              {
+                "idx": 3,
+                "describe": "清理浴室",
+                "start": 940,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "检查储物间",
+                "start": 950,
+                "duration": 10
+              }
+            ]
+          },
+          {
+            "idx": 16,
+            "describe": "休息",
+            "start": 960,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "整理客厅杂物",
+                "start": 960,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "准备晚餐食材",
+                "start": 970,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "听轻音乐放松",
+                "start": 980,
+                "duration": 15
+              },
+              {
+                "idx": 3,
+                "describe": "阅读杂志",
+                "start": 995,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "整理衣物",
+                "start": 1005,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "冥想放松",
+                "start": 1015,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 17,
+            "describe": "休息",
+            "start": 1020,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "放松身心",
+                "start": 1020,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "整理客厅",
+                "start": 1030,
+                "duration": 15
+              },
+              {
+                "idx": 2,
+                "describe": "整理厨房",
+                "start": 1045,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "洗衣服",
+                "start": 1055,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "准备明天早餐食材",
+                "start": 1065,
+                "duration": 5
+              },
+              {
+                "idx": 5,
+                "describe": "看书",
+                "start": 1070,
+                "duration": 5
+              },
+              {
+                "idx": 6,
+                "describe": "放松",
+                "start": 1075,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 18,
+            "describe": "吃晚饭",
+            "start": 1080,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "准备晚餐食材",
+                "start": 1080,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "煮饭",
+                "start": 1095,
+                "duration": 15
+              },
+              {
+                "idx": 2,
+                "describe": "吃晚饭",
+                "start": 1110,
+                "duration": 15
+              },
+              {
+                "idx": 3,
+                "describe": "洗碗",
+                "start": 1125,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "整理餐桌",
+                "start": 1135,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 19,
+            "describe": "看电视",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "休息",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "休息",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "睡觉",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "睡觉",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_16",
+            "node_15",
+            "node_14",
+            "node_13",
+            "node_12",
+            "node_11",
+            "node_10",
+            "node_9",
+            "node_8",
+            "node_7",
+            "node_6",
+            "node_5",
+            "node_4",
+            "node_3",
+            "node_2"
+          ],
+          "thought": [
+            "node_1",
+            "node_0"
+          ],
+          "chat": []
+        }
+      },
+      "chats": [],
+      "currently": "简在2025-02-13清晨仍紧握着竖琴，轻声哼唱着安抚埃迪的曲调，眼中满是疲惫却坚定的光芒，确保他安然入睡",
+      "action": {
+        "event": {
+          "subject": "简",
+          "predicate": "此时",
+          "object": "准备晚餐食材",
+          "describe": "准备晚餐食材",
+          "address": [
+            "the Ville",
+            "莫雷诺家族的房子",
+            "厨房",
+            "冰箱"
+          ],
+          "emoji": "准备晚餐食材"
+        },
+        "obj_event": {
+          "subject": "冰箱",
+          "predicate": "此时",
+          "object": "门开着",
+          "describe": "门开着",
+          "address": [
+            "the Ville",
+            "莫雷诺家族的房子",
+            "厨房",
+            "冰箱"
+          ],
+          "emoji": ""
+        },
+        "start": "20250213-18:00:00",
+        "duration": 15
+      },
+      "coord": [
+        75,
+        68
+      ]
+    },
+    "汤姆": {
+      "config_path": "assets\\village\\agents\\汤姆\\agent.json",
+      "status": {
+        "poignancy": 83
+      },
+      "schedule": {
+        "create": "20250213-09:00:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "睡觉",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "起床",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "开放柳树市场和药店",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "在店铺工作",
+            "start": 540,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "整理货架",
+                "start": 540,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "接待顾客",
+                "start": 550,
+                "duration": 15
+              },
+              {
+                "idx": 2,
+                "describe": "处理付款",
+                "start": 565,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "检查库存",
+                "start": 575,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "准备商品",
+                "start": 585,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "整理收银台",
+                "start": 595,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 10,
+            "describe": "处理医保卡和药品清单",
+            "start": 600,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "整理医保卡信息",
+                "start": 600,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "核对药品清单",
+                "start": 615,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "更新客户记录",
+                "start": 625,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "联系供应商确认库存",
+                "start": 635,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "检查药品有效期",
+                "start": 645,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "打包药品",
+                "start": 655,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 11,
+            "describe": "在店铺工作",
+            "start": 660,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "整理货架并补货",
+                "start": 660,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "处理顾客咨询",
+                "start": 675,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "核对药品库存清单",
+                "start": 685,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "检查医保卡报销流程",
+                "start": 695,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "记录药品销售数据",
+                "start": 705,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "整理药品陈列区",
+                "start": 715,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 12,
+            "describe": "吃午饭",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "准备午餐食材",
+                "start": 720,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "烹饪午餐",
+                "start": 735,
+                "duration": 15
+              },
+              {
+                "idx": 2,
+                "describe": "用餐",
+                "start": 750,
+                "duration": 20
+              },
+              {
+                "idx": 3,
+                "describe": "整理店铺货架",
+                "start": 770,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "回复顾客邮件",
+                "start": 780,
+                "duration": 5
+              },
+              {
+                "idx": 5,
+                "describe": "检查药品库存",
+                "start": 785,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "在店铺工作",
+            "start": 780,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "核对药品清单与医保卡信息",
+                "start": 780,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "整理货架并补货",
+                "start": 795,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "处理顾客咨询与订单",
+                "start": 805,
+                "duration": 20
+              },
+              {
+                "idx": 3,
+                "describe": "准备晚餐食材",
+                "start": 825,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "检查药品有效期并分类",
+                "start": 835,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 14,
+            "describe": "在店铺工作",
+            "start": 840,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "检查药品库存",
+                "start": 840,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "整理货架",
+                "start": 845,
+                "duration": 5
+              },
+              {
+                "idx": 2,
+                "describe": "处理顾客订单",
+                "start": 850,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "帮助顾客取药",
+                "start": 860,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "检查医保卡信息",
+                "start": 870,
+                "duration": 5
+              },
+              {
+                "idx": 5,
+                "describe": "准备药品清单",
+                "start": 875,
+                "duration": 5
+              },
+              {
+                "idx": 6,
+                "describe": "与顾客互动",
+                "start": 880,
+                "duration": 10
+              },
+              {
+                "idx": 7,
+                "describe": "处理进货单",
+                "start": 890,
+                "duration": 5
+              },
+              {
+                "idx": 8,
+                "describe": "检查店铺安全",
+                "start": 895,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 15,
+            "describe": "在店铺工作",
+            "start": 900,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "整理货架并补货",
+                "start": 900,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "处理顾客药品咨询",
+                "start": 910,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "检查医保卡报销流程",
+                "start": 920,
+                "duration": 15
+              },
+              {
+                "idx": 3,
+                "describe": "准备埃迪的特殊药物",
+                "start": 935,
+                "duration": 15
+              },
+              {
+                "idx": 4,
+                "describe": "核对药品清单与进货单",
+                "start": 950,
+                "duration": 10
+              }
+            ]
+          },
+          {
+            "idx": 16,
+            "describe": "在店铺工作",
+            "start": 960,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "核对药品清单",
+                "start": 960,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "与顾客讨论药品使用",
+                "start": 975,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "整理货架并补充库存",
+                "start": 985,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "检查医保卡报销流程",
+                "start": 995,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "为埃迪准备安眠药",
+                "start": 1005,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "清理收银台并整理账目",
+                "start": 1015,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 17,
+            "describe": "吃晚饭",
+            "start": 1020,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "准备晚餐食材",
+                "start": 1020,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "烹饪主菜",
+                "start": 1030,
+                "duration": 15
+              },
+              {
+                "idx": 2,
+                "describe": "准备配菜",
+                "start": 1045,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "与妻子共餐",
+                "start": 1055,
+                "duration": 20
+              },
+              {
+                "idx": 4,
+                "describe": "清理餐桌",
+                "start": 1075,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 18,
+            "describe": "回家",
+            "start": 1080,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "收拾物品并锁店",
+                "start": 1080,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "前往家中",
+                "start": 1085,
+                "duration": 15
+              },
+              {
+                "idx": 2,
+                "describe": "与妻子简短交流",
+                "start": 1100,
+                "duration": 5
+              },
+              {
+                "idx": 3,
+                "describe": "调整电视设置",
+                "start": 1105,
+                "duration": 5
+              },
+              {
+                "idx": 4,
+                "describe": "看电视节目1",
+                "start": 1110,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "看电视节目2",
+                "start": 1120,
+                "duration": 10
+              },
+              {
+                "idx": 6,
+                "describe": "放松休息",
+                "start": 1130,
+                "duration": 5
+              },
+              {
+                "idx": 7,
+                "describe": "检查药品清单",
+                "start": 1135,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 19,
+            "describe": "看电视",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "看电视",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "看电视",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "看电视",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "睡觉",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_17",
+            "node_16",
+            "node_15",
+            "node_14",
+            "node_13",
+            "node_12",
+            "node_11",
+            "node_10",
+            "node_9",
+            "node_8",
+            "node_7",
+            "node_6",
+            "node_5",
+            "node_4",
+            "node_3",
+            "node_2"
+          ],
+          "thought": [
+            "node_1",
+            "node_0"
+          ],
+          "chat": []
+        }
+      },
+      "chats": [],
+      "currently": "汤姆焦急而专注地奔波于各项任务之间，手指紧握着医保卡和药品清单，额角渗出细汗，却仍强打精神确保每一步都精准无误，只为让埃迪在暖意与琴声中安稳入眠，同时暗自祈祷这场关乎信任的行动能如他所愿顺利完成",
+      "action": {
+        "event": {
+          "subject": "汤姆",
+          "predicate": "此时",
+          "object": "收拾物品并锁店",
+          "describe": "收拾物品并锁店",
+          "address": [
+            "the Ville",
+            "柳树市场和药店",
+            "商店",
+            "杂货店柜台后面"
+          ],
+          "emoji": "收拾物品并锁店"
+        },
+        "obj_event": {
+          "subject": "杂货店柜台后面",
+          "predicate": "此时",
+          "object": "正在锁门",
+          "describe": "正在锁门",
+          "address": [
+            "the Ville",
+            "柳树市场和药店",
+            "商店",
+            "杂货店柜台后面"
+          ],
+          "emoji": ""
+        },
+        "start": "20250213-18:00:00",
+        "duration": 5
+      },
+      "coord": [
+        88,
+        44
+      ]
+    }
+  },
+  "step": 10
+}

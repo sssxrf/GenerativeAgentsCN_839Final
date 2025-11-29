@@ -9,6 +9,8 @@ from dotenv import load_dotenv, find_dotenv
 from modules.game import create_game, get_game
 from modules import utils, memory
 
+from modules.tasks import EddieRescueTask , MeetingTask
+
 personas = [
     # "阿伊莎", "克劳斯", "玛丽亚", "沃尔夫冈",  # 学生
     # "梅", "约翰", "埃迪",  # 家庭：教授、药店主人、学生
@@ -26,10 +28,12 @@ class SimulateServer:
         collab_mode="baseline",
         meeting_time=None,
         meeting_topic="讨论新项目",
-        meeting_place="汤姆和简的卧室",):
+        meeting_place="汤姆和简的卧室",
+        task_mode="none",):
         self.name = name
         self.static_root = static_root
         self.checkpoints_folder = checkpoints_folder
+        self.task_mode = task_mode
 
         # 历史存档数据（用于断点恢复）
         self.config = config
@@ -55,28 +59,64 @@ class SimulateServer:
 
         self.game = get_game()
 
-         # Only inject when starting a fresh simulation, not when resuming.
+        #  # Only inject when starting a fresh simulation, not when resuming.
+        # if start_step == 0 and meeting_time:
+        #     agents = ["简", "汤姆"]
+        #     self.logger.info(
+        #         f"[INFO] injecting meeting ({collab_mode}) for {agents} at {meeting_time}, "
+        #         f"place='{meeting_place}', topic='{meeting_topic}'"
+        #     )
+        #     if collab_mode == "baseline":
+        #         self._inject_meeting_memory_soft(
+        #             agents=agents,
+        #             when=meeting_time,
+        #             topic=meeting_topic,
+        #             place_keyword=meeting_place,
+        #         )
+        #     elif collab_mode == "centralized":
+        #         self._inject_meeting_memory_centralized(
+        #             agents=agents,
+        #             when=meeting_time,
+        #             topic=meeting_topic,
+        #             place_keyword=meeting_place,
+        #         )
+        
+        # 任务容器（以后可以放 rescue 等别的任务）
+        self.tasks = {}
+
+        # 只在新仿真开始时注入会议任务
         if start_step == 0 and meeting_time:
             agents = ["简", "汤姆"]
             self.logger.info(
                 f"[INFO] injecting meeting ({collab_mode}) for {agents} at {meeting_time}, "
                 f"place='{meeting_place}', topic='{meeting_topic}'"
             )
-            if collab_mode == "baseline":
-                self._inject_meeting_memory_soft(
-                    agents=agents,
-                    when=meeting_time,
-                    topic=meeting_topic,
-                    place_keyword=meeting_place,
+            meeting_task = MeetingTask(self.game, self.config, self.logger)
+            meeting_task.setup(
+                mode=collab_mode,
+                agents=agents,
+                when=meeting_time,
+                topic=meeting_topic,
+                place_keyword=meeting_place,
+            )
+            self.tasks["meeting"] = meeting_task
+
+        # 只在新开局 + 选择了 eddie_rescue 任务时注入
+        if start_step == 0 and task_mode == "eddie_rescue":
+            # 默认用简和汤姆做这个协作任务
+            task_agents = [a for a in ["简", "汤姆"] if a in self.game.agents]
+            if len(task_agents) >= 2:
+                self.logger.info(
+                    f"[TASK] setting up 'Eddie rescue' task for agents={task_agents}, mode={collab_mode}"
                 )
-            elif collab_mode == "centralized":
-                self._inject_meeting_memory_centralized(
-                    agents=agents,
-                    when=meeting_time,
-                    topic=meeting_topic,
-                    place_keyword=meeting_place,
+                self.tasks["eddie_rescue"] = EddieRescueTask(self.game, self.config, self.logger)
+                self.tasks["eddie_rescue"].setup(collab_mode, task_agents)
+            else:
+                self.logger.warning(
+                    "[TASK] 'eddie_rescue' requested but not enough agents (need at least 2)."
                 )
-        
+
+
         self.tile_size = self.game.maze.tile_size
         self.agent_status = {}
         if "agent_base" in config:
@@ -142,188 +182,9 @@ class SimulateServer:
     def load_static(self, path):
         return utils.load_dict(os.path.join(self.static_root, path))
 
-    # ----------------------------------------------------------------------
-    # BASELINE: soft memory injection with required location + higher poignancy
-    # ----------------------------------------------------------------------
-    def _inject_meeting_memory_soft(self, agents, when, topic, place_keyword=None):
-        """
-        Soft control:
-        - Add a 'thought' concept to each agent's associative memory.
-        - Includes explicit time & location in describe + address.
-        - Increases the concept's poignancy to make retrieval more likely.
-        """
-        # 时间：会议发生的时间（未来）
-        meeting_dt = utils.to_date(when, "%Y%m%d-%H:%M")
-        # 概念创建时间：现在（仿佛角色此刻在“计划”未来会议）
-        now = utils.get_timer().get_date()
-        expire = meeting_dt + datetime.timedelta(days=2)
+    
 
-        for name in agents:
-            agent = self.game.get_agent(name)
 
-            # Try to find the meeting location from spatial memory
-            address = None
-            if place_keyword:
-                try:
-                    address = agent.spatial.find_address(place_keyword, as_list=True)
-                except Exception:
-                    address = None
-
-            # Fallback: use current tile if we can't find the keyword
-            if not address:
-                address = agent.get_tile().get_address(as_list=True)
-
-            others = [a for a in agents if a != name]
-            others_str = "、".join(others) if others else "自己"
-
-            describe = (
-                f"{name} 计划在 {meeting_dt.strftime('%m月%d日 %H:%M')} "
-                f"和 {others_str} 在 {address[-1]} 开会，讨论 {topic}。"
-            )
-
-            event = memory.Event(
-                subject=name,
-                predicate="计划",
-                object="开会",
-                address=address,
-                describe=describe,
-            )
-
-            # Add as a 'thought' concept
-            node = agent._add_concept(
-                "thought",
-                event,
-                create=now,
-                expire=expire,
-            )
-
-            # Bump concept-level poignancy to increase chance of retrieval
-            try:
-                if node is not None and hasattr(node, "poignancy"):
-                    current_p = getattr(node, "poignancy", 0)
-                    node.poignancy = max(current_p, 5)
-            except Exception:
-                # Be robust to any internal differences in Node implementation
-                pass
-
-    # ----------------------------------------------------------------------
-    # CENTRALIZED: baseline + "system style" reminder in currently + agent-level poignancy
-    # ----------------------------------------------------------------------
-    def _inject_meeting_memory_centralized(self, agents, when, topic, place_keyword=None):
-        """
-        Centralized control:
-        - First do the baseline soft injection.
-        - Additionally:
-          * Append an "important task" sentence into each agent's `currently`,
-            so it shows up in almost every planning prompt.
-          * Raise agent-level poignancy, making reflection more likely.
-        - Still does NOT directly modify daily_schedule or actions.
-        """
-        # 先做 baseline 版本的软注入
-        self._inject_meeting_memory_soft(agents, when, topic, place_keyword)
-
-        meeting_dt = utils.to_date(when, "%Y%m%d-%H:%M")
-        date_str = meeting_dt.strftime("%m月%d日")
-        time_str = meeting_dt.strftime("%H:%M")
-
-        for name in agents:
-            agent = self.game.get_agent(name)
-            others = [a for a in agents if a != name]
-            others_str = "、".join(others) if others else "其他人"
-
-            # Try to re-resolve the address for better wording
-            address = None
-            if place_keyword:
-                try:
-                    address = agent.spatial.find_address(place_keyword, as_list=True)
-                except Exception:
-                    address = None
-            if not address:
-                address = agent.get_tile().get_address(as_list=True)
-            location_str = address[-1]
-
-            # 强化版“系统提示”：写入 currently 字段
-            important_msg = (
-                f"\n今天有一件非常重要的事情："
-                f"{name} 必须在 {date_str} {time_str} 和 {others_str} "
-                f"在 {location_str} 开会，讨论 {topic}。"
-                f"请优先安排这个会议，即使需要调整日常计划。"
-            )
-
-            try:
-                if hasattr(agent, "scratch") and hasattr(agent.scratch, "currently"):
-                    base_currently = agent.scratch.currently or ""
-                    agent.scratch.currently = base_currently + important_msg
-            except Exception:
-                pass
-
-            # 提升 agent 的整体 poignancy，让“重要事件”更容易触发反思
-            try:
-                if hasattr(agent, "status"):
-                    if isinstance(agent.status, dict):
-                        cur_p = agent.status.get("poignancy", 0)
-                        agent.status["poignancy"] = max(cur_p, 8)
-                    elif hasattr(agent.status, "poignancy"):
-                        cur_p = getattr(agent.status, "poignancy", 0)
-                        agent.status.poignancy = max(cur_p, 8)
-            except Exception:
-                pass
-
-    # def _inject_meeting_memory(self, agents, when, topic):
-    #     """
-    #     软硬结合控制：
-    #     1）在记忆中注入“会议计划”（soft control）
-    #     2）记录一个会议对象，在 simulate() 里用坐标做轻微硬控（teleport）
-    #     """
-    #     meeting_dt = utils.to_date(when, "%Y%m%d-%H:%M")
-    #     expire = meeting_dt + datetime.timedelta(days=2)
-
-    #     # 会议持续时间（分钟）：可以改成 10 / 20 / 30
-    #     duration_minutes = 20
-    #     meeting_end = meeting_dt + datetime.timedelta(minutes=duration_minutes)
-
-    #     # 以第一个人的初始坐标作为会议地点（例如：卧室的床）
-    #     if agents:
-    #         first_agent_name = agents[0]
-    #         meeting_coord = tuple(self.agent_status[first_agent_name]["coord"])
-    #     else:
-    #         meeting_coord = None
-
-    #     # 记录会议，用于 simulate() 里的硬控
-    #     self.meetings.append(
-    #         {
-    #             "agents": agents,
-    #             "start": meeting_dt,
-    #             "end": meeting_end,
-    #             "coord": meeting_coord,
-    #             "topic": topic,
-    #         }
-    #     )
-
-    #     # 继续原来的“软注入”：在概念记忆里加一条“计划开会”的 thought
-    #     for name in agents:
-    #         agent = self.game.get_agent(name)
-
-    #         # 使用当前 tile 作为会议地点（通常是卧室的床）
-    #         address = agent.get_tile().get_address(as_list=True)
-
-    #         others = [a for a in agents if a != name]
-    #         others_str = "、".join(others) if others else "自己"
-
-    #         describe = (
-    #             f"{name} 计划在 {meeting_dt.strftime('%m月%d日 %H:%M')} "
-    #             f"和 {others_str} 在 {address[-1]} 讨论 {topic}。"
-    #         )
-    #         event = memory.Event(
-    #             subject=name,
-    #             predicate="计划",
-    #             object="开会",
-    #             address=address,
-    #             describe=describe,
-    #         )
-
-    #         # 加入高层“thought”记忆（软控制）
-    #         agent._add_concept("thought", event, create=meeting_dt, expire=expire)
 
 # 从存档数据中载入配置，用于断点恢复
 def get_config_from_log(checkpoints_folder):
@@ -411,6 +272,14 @@ parser.add_argument(
     default="汤姆和简的卧室",
     help="Keyword for meeting place (used with agent.spatial.find_address).",
 )
+parser.add_argument(
+    "--task_mode",
+    type=str,
+    default="none",
+    choices=["none", "eddie_rescue"],
+    help="Special cooperative task to inject (e.g., 'eddie_rescue').",
+)
+
 args = parser.parse_args()
 
 if __name__ == "__main__":
@@ -444,6 +313,7 @@ if __name__ == "__main__":
     static_root = "frontend/static"
 
     server = SimulateServer(name, static_root, checkpoints_folder, sim_config, start_step, args.verbose, args.log, collab_mode=args.collab_mode,
+        task_mode=args.task_mode,
         meeting_time=args.meeting_time,
         meeting_topic=args.meeting_topic,
         meeting_place=args.meeting_place)

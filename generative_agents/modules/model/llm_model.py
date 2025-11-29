@@ -24,7 +24,7 @@ class LLMModel:
     def completion(
         self,
         prompt,
-        retry=10,
+        retry=4,
         callback=None,
         failsafe=None,
         caller="llm_normal",
